@@ -35,9 +35,9 @@ resource "aws_cloudwatch_log_group" "microsite_api_api_gw" {
 }
 
 resource "aws_apigatewayv2_integration" "lambda_integration" {
-  api_id             = aws_apigatewayv2_api.microsite_api.id
-  integration_type   = "AWS_PROXY"
-  integration_uri    = aws_lambda_function.lambda.arn
+  api_id                 = aws_apigatewayv2_api.microsite_api.id
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.lambda.arn
   payload_format_version = "2.0"
 }
 

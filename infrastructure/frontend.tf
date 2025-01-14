@@ -1,8 +1,8 @@
 resource "null_resource" "build_next_app" {
   provisioner "local-exec" {
     command = <<EOT
-       cd ../fe/
-       npm install && npm run build 
+      cd ../fe/
+      npm install && npm run build 
     EOT
   }
   triggers = {
@@ -24,18 +24,41 @@ resource "aws_s3_bucket_website_configuration" "microsite_web_bucket" {
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "public_access_block" {
+resource "aws_s3_bucket_policy" "web_bucket_policy" {
   bucket = aws_s3_bucket.web_bucket.id
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "AllowGetObjects"
+    Statement = [
+      {
+        Sid       = "AllowPublic"
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
+        Resource  = "${aws_s3_bucket.web_bucket.arn}/**"
+      }
+    ]
+  })
+}
+
+locals {
+  mime_types = {
+    ".html" = "text/html"
+    ".png"  = "image/png"
+    ".jpg"  = "image/jpeg"
+    ".gif"  = "image/gif"
+    ".svg"  = "image/svg+xml"
+    ".css"  = "text/css"
+    ".js"   = "application/javascript"
+  }
 }
 
 resource "aws_s3_object" "upload_object" {
-  for_each      = fileset("../fe/out/", "*")
-  bucket        = aws_s3_bucket.web_bucket.id
-  key           = each.value
-  source        = "../fe/out/${each.value}"
-  etag          = filemd5("../fe/out/${each.value}")
+  for_each     = fileset("../fe/out/", "**")
+  bucket       = aws_s3_bucket.web_bucket.id
+  key          = each.value
+  source       = "../fe/out/${each.value}"
+  etag         = filemd5("../fe/out/${each.value}")
+  content_type = lookup(local.mime_types, regex("\\.[^.]+$", each.key), null)
 }

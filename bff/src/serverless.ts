@@ -16,6 +16,7 @@ async function bootstrap() {
       new ExpressAdapter(expressApp),
     );
 
+    nestApp.setGlobalPrefix('api');
     nestApp.enableCors();
 
     await nestApp.init();
