@@ -1,8 +1,13 @@
-import type { NextConfig } from "next";
+import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  output: 'export'
+export default async (phase : any) => {
+  if (phase === PHASE_PRODUCTION_BUILD) {
+    return {
+      output: 'export'
+    }
+  }
+ 
+  return {
+
+  }
 };
-
-export default nextConfig;

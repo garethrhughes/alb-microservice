@@ -1,0 +1,10 @@
+{
+  "name": "microsite-poc",
+  "version": "1.0.0",
+  "description": "",
+  "workspaces": ["bff", "fe"],
+  "scripts": {
+    "start": "pnpm -r run start",
+    "dev": "pnpm -r run dev"
+  }
+}
