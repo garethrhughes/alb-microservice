@@ -1,7 +1,20 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./page.module.css";
+import { useState, useEffect } from 'react'
 
 export default function Home() {
+  const [data, setData] = useState<string>("")
+ 
+  useEffect(() => {
+    fetch('/api/hello')
+      .then((res) => res.text())
+      .then((data) => {
+        setData(data)
+      })
+  }, [])
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -19,6 +32,7 @@ export default function Home() {
           </li>
           <li>Save and see your changes instantly.</li>
         </ol>
+        <p>{data}</p>
 
         <div className={styles.ctas}>
           <a

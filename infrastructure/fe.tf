@@ -1,15 +1,3 @@
-resource "null_resource" "build_next_app" {
-  provisioner "local-exec" {
-    command = <<EOT
-      cd ../fe/
-      npm install && npm run build 
-    EOT
-  }
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-}
-
 resource "aws_s3_bucket" "web_bucket" {
   bucket = "microsite-web-bucket-dev"
 }

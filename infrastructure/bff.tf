@@ -1,21 +1,3 @@
-resource "null_resource" "build_nest_lambda" {
-  provisioner "local-exec" {
-    command = <<EOT
-       npm install ../bff/ && ncc build ../bff/src/serverless.ts -o ../bff/dist
-    EOT
-  }
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-}
-
-data "archive_file" "lambda_archive" {
-  type        = "zip"
-  source_dir  = "../bff/dist/"
-  output_path = "./lambda.zip"
-  depends_on  = [null_resource.build_nest_lambda]
-}
-
 resource "aws_lambda_function" "lambda" {
   filename         = "lambda.zip"
   function_name    = "microsite-lambda"
@@ -115,7 +97,6 @@ resource "aws_apigatewayv2_integration" "lambda_integration" {
   payload_format_version = "2.0"
 }
 
-# Route for API Gateway
 resource "aws_apigatewayv2_route" "default_route" {
   api_id    = aws_apigatewayv2_api.microsite_api.id
   route_key = "$default"
@@ -134,8 +115,4 @@ resource "aws_lambda_permission" "api_gateway_invoke" {
   function_name = aws_lambda_function.lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.microsite_api.execution_arn}/*/*"
-}
-
-output "api_endpoint" {
-  value = aws_apigatewayv2_api.microsite_api.api_endpoint
 }

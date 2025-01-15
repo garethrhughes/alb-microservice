@@ -1,26 +1,28 @@
 locals {
   s3_origin_id   = "microsite-web-bucket-dev-origin"
   s3_domain_name = "microsite-web-bucket-dev.s3-website-ap-southeast-2.amazonaws.com"
+  api_gateway_origin_id = "microsite-api-origin"
+  api_gateway_domain_name = replace(aws_apigatewayv2_stage.default_stage.invoke_url, "/^https?://([^/]*).*/", "$1")
 }
 
 resource "aws_cloudfront_distribution" "this" {
-
   enabled = true
 
   origin {
     origin_id   = local.s3_origin_id
     domain_name = local.s3_domain_name
+    
     custom_origin_config {
       http_port              = 80
       https_port             = 443
       origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1"]
+      origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
 
   origin {
-    domain_name = replace(aws_apigatewayv2_stage.default_stage.invoke_url, "/^https?://([^/]*).*/", "$1")
-    origin_id   = "apigw-origin"
+    origin_id   = local.api_gateway_origin_id
+    domain_name = local.api_gateway_domain_name
 
     custom_origin_config {
       http_port              = 80
@@ -35,7 +37,7 @@ resource "aws_cloudfront_distribution" "this" {
     allowed_methods = ["GET", "POST", "PUT", "HEAD", "DELETE", "OPTIONS", "PATCH"]
     cached_methods  = ["GET", "HEAD"]
 
-    target_origin_id = "apigw-origin"
+    target_origin_id = local.api_gateway_origin_id
 
     forwarded_values {
       query_string = true
@@ -68,8 +70,6 @@ resource "aws_cloudfront_distribution" "this" {
     default_ttl            = 0
     max_ttl                = 0
   }
-
-
 
   restrictions {
     geo_restriction {
