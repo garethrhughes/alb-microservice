@@ -16,6 +16,7 @@ async function bootstrap() {
       new ExpressAdapter(expressApp),
     );
 
+    // needed for routing with cloudfront distribution
     nestApp.setGlobalPrefix('api');
     nestApp.enableCors();
 

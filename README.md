@@ -7,9 +7,7 @@ bff - lambda + api gateway
 
 TODO:
 
-fe
-cloudfront
-login
 variables
 naming
 deploy into our dev
+login
