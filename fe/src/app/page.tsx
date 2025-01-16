@@ -8,7 +8,7 @@ export default function Home() {
   const [data, setData] = useState<string>("")
  
   useEffect(() => {
-    fetch('/api/hello')
+    fetch('http://localhost:3000/api/hello')
       .then((res) => res.text())
       .then((data) => {
         setData(data)
