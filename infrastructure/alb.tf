@@ -62,7 +62,7 @@ module "alb" {
         enabled             = true
         interval            = 30
         path                = "/"
-        port                = 80
+        port                = 3000
         healthy_threshold   = 5
         unhealthy_threshold = 2
         timeout             = 5

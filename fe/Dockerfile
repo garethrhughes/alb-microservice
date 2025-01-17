@@ -1,36 +1,26 @@
 # Step 1: Build the Next.js application
 FROM node:22-alpine AS builder
 
-# Set the working directory
 WORKDIR /app
 
-# Install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the application code
 COPY . .
 
-# Build the Next.js application
 RUN npm run build
+RUN npm prune --production
 
-# Step 2: Use Nginx to serve the static files
-FROM nginx:stable-alpine
+# Stage 2: Run the app
+FROM node:22-alpine
 
-# Set the working directory
-WORKDIR /usr/share/nginx/html
+WORKDIR /app
 
-# Remove the default Nginx index.html
-RUN rm -rf ./*
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
 
-# Copy the Next.js build output to Nginx
-COPY --from=builder /app/out .
+EXPOSE 3000
 
-# Copy the custom Nginx configuration file
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose the port that Nginx will listen on
-EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "start"]

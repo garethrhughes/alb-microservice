@@ -46,7 +46,7 @@ module "ecs" {
             "secretOptions" = []
           },
           health_check = {
-            command      = ["CMD-SHELL", "curl -f http://localhost:80/api/hello || exit 1"]
+            command      = ["CMD-SHELL", "curl -f http://localhost:3000/api/hello || exit 1"]
             interval     = 30
             timeout      = 5
             retries      = 3
@@ -79,8 +79,8 @@ module "ecs" {
           port_mappings = [
             {
               name          = "http",
-              containerPort = 80,
-              hostPort      = 80,
+              containerPort = 3000,
+              hostPort      = 3000,
               protocol      = "tcp",
               appProtocol   = "http"
             }
@@ -101,7 +101,7 @@ module "ecs" {
             "secretOptions" = []
           },
           health_check = {
-            command      = ["CMD-SHELL", "curl -f http://localhost:80 || exit 1"]
+            command      = ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
             interval     = 30
             timeout      = 5
             retries      = 3
@@ -114,7 +114,7 @@ module "ecs" {
         service = {
           target_group_arn = module.alb.target_groups["http"].arn
           container_name   = "microsite-fe"
-          container_port   = 80
+          container_port   = 3000
         }
       }
       subnet_ids         = ["subnet-0288b13ac640294b2", "subnet-0ba961e92a57e41ee", "subnet-0718aafaaa9d6d462"]
@@ -129,8 +129,8 @@ resource "aws_security_group" "allow_tls_fe" {
   vpc_id      = data.aws_vpc.selected.id
 
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 3000
+    to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
