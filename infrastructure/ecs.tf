@@ -36,7 +36,7 @@ module "ecs" {
           log_configuration = {
             "logDriver" = "awslogs",
             "options" = {
-              "awslogs-group"         = "/aws/ecs/microsite-bff-dev",
+              "awslogs-group"         = "/aws/ecs/microsite-dev",
               "mode"                  = "non-blocking",
               "awslogs-create-group"  = "true",
               "max-buffer-size"       = "25m",
@@ -91,7 +91,7 @@ module "ecs" {
           log_configuration = {
             "logDriver" = "awslogs",
             "options" = {
-              "awslogs-group"         = "/aws/ecs/microsite-fe-dev",
+              "awslogs-group"         = "/aws/ecs/microsite-dev",
               "mode"                  = "non-blocking",
               "awslogs-create-group"  = "true",
               "max-buffer-size"       = "25m",
