@@ -14,6 +14,8 @@ RUN npm prune --production
 # Stage 2: Run the app
 FROM node:22-alpine
 
+RUN apk add curl
+
 WORKDIR /app
 
 COPY --from=builder /app/package.json ./package.json

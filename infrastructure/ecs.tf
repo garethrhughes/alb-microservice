@@ -1,6 +1,6 @@
 module "ecs" {
   source       = "terraform-aws-modules/ecs/aws"
-  cluster_name = "microsite-bff-dev"
+  cluster_name = "microsite-dev"
   fargate_capacity_providers = {
     FARGATE = {
       default_capacity_provider_strategy = {
@@ -11,13 +11,13 @@ module "ecs" {
   }
   services = {
     "microsite-bff-service-dev" = {
-      cpu              = 512
-      memory           = 1024
+      cpu              = 256
+      memory           = 512
       assign_public_ip = true
 
       container_definitions = {
         microsite-bff = {
-          image                    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.ap-southeast-2.amazonaws.com/microsite-bff:latest"
+          image                    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.ap-southeast-2.amazonaws.com/microsite-bff:1"
           essential                = true
           readonly_root_filesystem = false
 
@@ -65,14 +65,14 @@ module "ecs" {
       security_group_ids = [aws_security_group.allow_tls_bff.id]
     }
     "microsite-fe-service-dev" = {
-      cpu              = 512
-      memory           = 1024
+      cpu              = 256
+      memory           = 512
       assign_public_ip = true
 
       # Container definition(s)
       container_definitions = {
         microsite-fe = {
-          image                    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.ap-southeast-2.amazonaws.com/microsite-fe:latest"
+          image                    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.ap-southeast-2.amazonaws.com/microsite-fe:1"
           essential                = true
           readonly_root_filesystem = false
 
