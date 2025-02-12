@@ -1,11 +1,11 @@
 resource "aws_acm_certificate" "cert" {
-  domain_name       = "microsite.aws.gareth.one"
+  domain_name       = "microsite.sandbox.mypassglobal.com"
   validation_method = "DNS"
 }
 
 resource "aws_route53_record" "dns_record" {
   zone_id = data.aws_route53_zone.hosted_zone.zone_id
-  name    = "microsite.aws.gareth.one"
+  name    = "microsite.sandbox.mypassglobal.com"
   type    = "A"
 
   alias {

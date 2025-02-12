@@ -15,6 +15,8 @@ module "ecs" {
       memory           = 512
       assign_public_ip = true
 
+      task_role_arn = aws_iam_role.bff_task_role.arn
+
       container_definitions = {
         microsite-bff = {
           image                    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.ap-southeast-2.amazonaws.com/microsite-bff:1"
@@ -61,7 +63,7 @@ module "ecs" {
           container_port   = 3000
         }
       }
-      subnet_ids         = ["subnet-0288b13ac640294b2", "subnet-0ba961e92a57e41ee", "subnet-0718aafaaa9d6d462"]
+      subnet_ids         = ["subnet-0bb23f0bc0878a3a9", "subnet-05d5a6401b0bdc24c", "subnet-0908c952e37fb2e40"]
       security_group_ids = [aws_security_group.allow_tls_bff.id]
     }
     "microsite-fe-service-dev" = {
@@ -117,7 +119,7 @@ module "ecs" {
           container_port   = 3000
         }
       }
-      subnet_ids         = ["subnet-0288b13ac640294b2", "subnet-0ba961e92a57e41ee", "subnet-0718aafaaa9d6d462"]
+      subnet_ids         = ["subnet-0bb23f0bc0878a3a9", "subnet-05d5a6401b0bdc24c", "subnet-0908c952e37fb2e40"]
       security_group_ids = [aws_security_group.allow_tls_fe.id]
     }
   }

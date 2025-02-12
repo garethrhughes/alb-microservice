@@ -7,10 +7,10 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "eda-tf-states"
+    bucket         = "mypassglobal-sandbox-acct-terraform"
     key            = "microsite/terraform.tfstate"
     region         = "ap-southeast-2"
-    dynamodb_table = "eda-state-locks"
+    dynamodb_table = "mypassglobal-sandbox-acct-terraform"
     encrypt        = true
   }
 

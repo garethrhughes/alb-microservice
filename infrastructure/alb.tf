@@ -4,7 +4,7 @@ module "alb" {
 
   name    = "microsite-alb-dev"
   vpc_id  = data.aws_vpc.selected.id
-  subnets = ["subnet-0288b13ac640294b2", "subnet-0ba961e92a57e41ee", "subnet-0718aafaaa9d6d462"]
+  subnets = ["subnet-0bb23f0bc0878a3a9", "subnet-05d5a6401b0bdc24c", "subnet-0908c952e37fb2e40"]
 
   # Security Group
   security_group_ingress_rules = {
