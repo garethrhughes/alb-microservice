@@ -1,10 +1,3 @@
-amazon cloudfront
-
-fe - s3
-bff - lambda + api gateway
-
-
-
 TODO:
 
 get working locally + pnpm
